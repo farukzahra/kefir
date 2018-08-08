@@ -19,56 +19,98 @@ class _MudaDetailState extends State<MudaDetail> {
 
   _MudaDetailState(this._muda);
 
+  DateFormat _formatter = DateFormat('dd/MM/yyyy HH:mm');
+
   Future<List<String>> _getData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     _values = prefs.getStringList(_muda);
     if (_values == null) {
-      _values = new List<String>();
+      _values = List<String>();
     }
+    _ordenaLista();
     return _values;
+  }
+
+  _ordenaLista() {
+    _values.sort((a, b) {
+      DateTime adata = _formatter.parse(a);
+      DateTime bdata = _formatter.parse(b);
+      return bdata.compareTo(adata);
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    return new FutureBuilder(
+    return FutureBuilder(
         future: _getData(),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           List<String> _values = snapshot.data;
-          return new Scaffold(
+          return Scaffold(
               backgroundColor: Colors.white,
-              appBar: new AppBar(
+              appBar: AppBar(
                 title: const Text('Minhas Mudas'),
               ),
-              floatingActionButton: new FloatingActionButton(
+              floatingActionButton: FloatingActionButton(
                 onPressed: _incrementCounter,
                 tooltip: 'Increment',
-                child: new Icon(Icons.add),
+                child: Icon(Icons.add),
               ),
-              body: new ListView.builder(
-                itemCount: _values != null ? _values.length : 0,
-                itemBuilder: (BuildContext context, int index) {
-                  return new Column(
+              body: new Column(children: <Widget>[
+                FlatButton(
+                  onPressed: () {
+                    _removerMuda();
+                  },
+                  child: Column(
+                    // Replace with a Row for horizontal icon + text
                     children: <Widget>[
-                      ListTile(
-                        title: new Text(_values[index]),
-                        trailing: _buildDeleteButton(context, _values[index]),
-                      ),
-                      new Divider(
-                        height: 2.0,
-                      ),
+                      Icon(Icons.delete),
+                      Text("Remover esta muda")
                     ],
-                  );
-                },
-              ));
+                  ),
+                ),
+                new Expanded(
+                  child: new Container(height: 200.0, child: _buildListView()),
+                ),
+              ]));
         });
+  }
+
+  void _removerMuda() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    List<String> _values = prefs.getStringList("listaGeral");
+
+    _values.remove(_muda);
+
+    prefs.setStringList("listaGeral", _values);
+
+    Navigator.of(context).pushReplacementNamed('/MinhasMudas');
+  }
+
+  Widget _buildListView() {
+    return ListView.builder(
+      itemCount: _values != null ? _values.length : 0,
+      itemBuilder: (BuildContext context, int index) {
+        return Column(
+          children: <Widget>[
+            ListTile(
+              title: Text(_values[index]),
+              trailing: _buildDeleteButton(context, _values[index]),
+            ),
+            Divider(
+              height: 2.0,
+            ),
+          ],
+        );
+      },
+    );
   }
 
   void _incrementCounter() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    var now = new DateTime.now();
-    var formatter = new DateFormat('dd/MM/yyyy HH:mm');
+    var now = DateTime.now();
     setState(() {
-      _values.add(formatter.format(now));
+      _values.add(_formatter.format(now));
+      _ordenaLista();
     });
     prefs.setStringList(_muda, _values);
   }
@@ -86,6 +128,7 @@ class _MudaDetailState extends State<MudaDetail> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
       _values.remove(registro);
+      _ordenaLista();
     });
     prefs.setStringList(_muda, _values);
   }

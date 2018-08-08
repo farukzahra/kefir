@@ -19,22 +19,30 @@ class _NovaMudaState extends State<NovaMuda> {
   }
 
   Widget build(BuildContext context) {
-    return new Scaffold(
-        backgroundColor: Colors.white,
-        appBar: new AppBar(
-          title: const Text('Sobre'),
-        ),
-        drawer: buildDrawer(context),
-        body: new Center(
-            child: new Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
+    return Scaffold(
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        title: const Text('Nova Muda'),
+      ),
+      drawer: buildDrawer(context),
+      body: _buildBody(),
+    );
+  }
+
+  Widget _buildBody() {
+    return Container(
+      padding: const EdgeInsets.all(32.0),
+      child: Row(children: [
+        Expanded(
+          child:
+              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             Form(
               key: _formKey,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   TextFormField(
+                    decoration: InputDecoration(labelText: 'Nome da Muda'),
                     validator: (value) {
                       if (value.isEmpty) {
                         return 'Nome é obrigatório!';
@@ -42,9 +50,14 @@ class _NovaMudaState extends State<NovaMuda> {
                     },
                     controller: nomeController,
                   ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 16.0),
+                  SizedBox(height: 20.0),
+                  Container(
+                    width: double.infinity,
                     child: RaisedButton(
+                      color: Theme.of(context).accentColor,
+                      textColor: Colors.white,
+                      elevation: 4.0,
+                      splashColor: Colors.blueGrey,
                       onPressed: () {
                         // Validate will return true if the form is valid, or false if
                         // the form is invalid.
@@ -52,14 +65,16 @@ class _NovaMudaState extends State<NovaMuda> {
                           _criaMuda(nomeController.text);
                         }
                       },
-                      child: Text('Submit'),
+                      child: Text('Criar'),
                     ),
                   ),
                 ],
               ),
             )
-          ],
-        )));
+          ]),
+        )
+      ]),
+    );
   }
 
   _criaMuda(String nome) async {
@@ -69,7 +84,7 @@ class _NovaMudaState extends State<NovaMuda> {
 
     List<String> listaGeral = prefs.getStringList("listaGeral");
     if (listaGeral == null) {
-      listaGeral = new List<String>();
+      listaGeral = List<String>();
     }
     listaGeral.add(nome);
     prefs.setStringList("listaGeral", listaGeral);

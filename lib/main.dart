@@ -6,13 +6,14 @@ import 'package:kefir/novamuda.dart';
 
 import './home.dart';
 import './sobre.dart';
-  
-  
 
-
-void main() {  
-
+void main() {
   runApp(new MaterialApp(
+    // theme: new ThemeData(
+    //     primarySwatch: Colors.blueGrey,
+    //     scaffoldBackgroundColor: Colors.white,
+    //     primaryColor: Colors.blueGrey,
+    //     backgroundColor: Colors.white),
     home: new SplashScreen(),
     routes: <String, WidgetBuilder>{
       '/HomeScreen': (BuildContext context) => new HomeScreen(),
@@ -30,10 +31,7 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen> {
   startTime() async {
-    // SharedPreferences prefs = await SharedPreferences.getInstance();    
-    // prefs.remove('lista');
-
-    var _duration = new Duration(seconds: 4);
+    var _duration = new Duration(seconds: 2);
     return new Timer(_duration, navigationPage);
   }
 
@@ -50,7 +48,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-      backgroundColor: Colors.white ,
+      backgroundColor: Colors.white,
       body: new Center(
         child: new Image.asset('images/eternify.png'),
       ),

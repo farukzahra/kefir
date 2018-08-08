@@ -16,14 +16,14 @@ buildDrawer(BuildContext context) {
           ),
         ),
         ListTile(
-          leading: Icon(Icons.delete),
+          leading: Icon(Icons.list),
           title: Text('Minhas Mudas'),
           onTap: () {
             Navigator.of(context).pushReplacementNamed('/MinhasMudas');
           },
         ),
         ListTile(
-          leading: Icon(Icons.info),
+          leading: Icon(Icons.create),
           title: Text('Nova Muda'),
           onTap: () {
             Navigator.of(context).pushReplacementNamed('/NovaMuda');
