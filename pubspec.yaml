@@ -20,7 +20,8 @@ dependencies:
   intl: ^0.15.7
   url_launcher: ^3.0.3
   firebase_database: ^1.0.3
- 
+  http: ^0.11.3+17
+
 
 dev_dependencies:
   flutter_test:
