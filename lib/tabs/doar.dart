@@ -13,7 +13,16 @@ class Doar extends StatelessWidget {
       builder: (BuildContext context, AsyncSnapshot<List<TextSpan>> snapshot) {
         switch (snapshot.connectionState) {
           case ConnectionState.waiting:
-            return new Text('Carregando...');
+            return new Center(
+              child: new SizedBox(
+                height: 50.0,
+                width: 50.0,
+                child: new CircularProgressIndicator(
+                  value: null,
+                  strokeWidth: 7.0,
+                ),
+              ),
+            );
           default:
             if (snapshot.hasError)
               return new Text('Error: ${snapshot.error}');
@@ -44,17 +53,19 @@ class Doar extends StatelessWidget {
     await http
         .get('https://kefir-1e0d8.firebaseio.com/grupos-kefir.json')
         .then((http.Response response) {
-            print(response.body);
-            final List<dynamic> grupoListData = json.decode(response.body);
-            grupoListData.forEach((dynamic grupoData) {
-              urls.add(LinkTextSpan(
-                  style: linkStyle,
-                  url: grupoData['url'],
-                  text: grupoData['descricao'] + '\n\n'));
-            });
-          });
+      print(response.body);
+      final List<dynamic> grupoListData = json.decode(response.body);
+      grupoListData.forEach((dynamic grupoData) {
+        urls.add(LinkTextSpan(
+            style: linkStyle,
+            url: grupoData['url'],
+            text: grupoData['descricao'] + '\n\n'));
+      });
+    });
     urls.add(new TextSpan(
-        style: aboutTextStyle, text: 'Para divulgar seu grupo envie um email para farukz@gmail.com\n\n'));
+        style: aboutTextStyle,
+        text:
+            'Para divulgar seu grupo envie um email para farukz@gmail.com\n\n'));
     return urls;
   }
 }
