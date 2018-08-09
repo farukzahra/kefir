@@ -1,4 +1,4 @@
-package com.example.kefir;
+package com.fmz.kefir;
 
 import android.os.Bundle;
 import io.flutter.app.FlutterActivity;
