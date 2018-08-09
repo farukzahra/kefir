@@ -9,9 +9,9 @@ import './screens/support.dart' as _supportPage;
 void main() => runApp(new MaterialApp(
         title: 'Kefir - Compartilhe',
         theme: new ThemeData(
-            primarySwatch: Colors.blueGrey,
+            primarySwatch: Colors.green,
             scaffoldBackgroundColor: Colors.white,
-            primaryColor: Colors.blueGrey,
+            primaryColor: Colors.green,
             backgroundColor: Colors.white),
         home: new SplashScreen(),
         onGenerateRoute: (RouteSettings settings) {

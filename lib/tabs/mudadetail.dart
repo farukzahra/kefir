@@ -44,11 +44,10 @@ class _MudaDetailState extends State<MudaDetail> {
     return FutureBuilder(
         future: _getData(),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
-          List<String> _values = snapshot.data;
           return Scaffold(
               backgroundColor: Colors.white,
               appBar: AppBar(
-                title: const Text('Minhas Mudas'),
+                title: const Text('Registrar Troca'),
               ),
               floatingActionButton: FloatingActionButton(
                 onPressed: _incrementCounter,

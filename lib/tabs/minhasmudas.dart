@@ -32,7 +32,14 @@ class _MinhasMudasState extends State<MinhasMudas> {
               children: <Widget>[
                 ListTile(
                   title: new Text(_values[index]),
-                  trailing: _buildSearchButton(context, _values[index]),
+                  //trailing: _buildSearchButton(context, _values[index]),
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        new MaterialPageRoute(
+                            builder: (BuildContext context) =>
+                                new MudaDetail(_values[index])));
+                  },
                 ),
                 new Divider(
                   height: 2.0,
