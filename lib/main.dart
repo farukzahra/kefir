@@ -1,27 +1,68 @@
+import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:kefir/home.dart';
 import 'dart:async';
 
-import 'package:flutter/material.dart';
-import 'package:kefir/minhasmudas.dart';
-import 'package:kefir/novamuda.dart';
+import './screens/about.dart' as _aboutPage;
+import './screens/support.dart' as _supportPage;
 
-import './home.dart';
-import './sobre.dart';
+void main() => runApp(new MaterialApp(
+        title: 'Kefir - Compartilhe',
+        theme: new ThemeData(
+            primarySwatch: Colors.blueGrey,
+            scaffoldBackgroundColor: Colors.white,
+            primaryColor: Colors.blueGrey,
+            backgroundColor: Colors.white),
+        home: new SplashScreen(),
+        onGenerateRoute: (RouteSettings settings) {
+          switch (settings.name) {
+            case '/about':
+              return new FromRightToLeft(
+                builder: (_) => new _aboutPage.About(),
+                settings: settings,
+              );
+            case '/support':
+              return new FromRightToLeft(
+                builder: (_) => new _supportPage.Support(),
+                settings: settings,
+              );
+          }
+        },
+        routes: <String, WidgetBuilder>{
+          '/tabs': (BuildContext context) => new Tabs(),
+        }));
 
-void main() {
-  runApp(new MaterialApp(
-    // theme: new ThemeData(
-    //     primarySwatch: Colors.blueGrey,
-    //     scaffoldBackgroundColor: Colors.white,
-    //     primaryColor: Colors.blueGrey,
-    //     backgroundColor: Colors.white),
-    home: new SplashScreen(),
-    routes: <String, WidgetBuilder>{
-      '/HomeScreen': (BuildContext context) => new HomeScreen(),
-      '/Sobre': (BuildContext context) => new Sobre(),
-      '/MinhasMudas': (BuildContext context) => new MinhasMudas(),
-      '/NovaMuda': (BuildContext context) => new NovaMuda(),
-    },
-  ));
+class FromRightToLeft<T> extends MaterialPageRoute<T> {
+  FromRightToLeft({WidgetBuilder builder, RouteSettings settings})
+      : super(builder: builder, settings: settings);
+
+  @override
+  Widget buildTransitions(BuildContext context, Animation<double> animation,
+      Animation<double> secondaryAnimation, Widget child) {
+    if (settings.isInitialRoute) return child;
+
+    return new SlideTransition(
+      child: new Container(
+        decoration: new BoxDecoration(boxShadow: [
+          new BoxShadow(
+            color: Colors.black26,
+            blurRadius: 25.0,
+          )
+        ]),
+        child: child,
+      ),
+      position: new Tween<Offset>(
+        begin: const Offset(1.0, 0.0),
+        end: Offset.zero,
+      ).animate(new CurvedAnimation(
+        parent: animation,
+        curve: Curves.fastOutSlowIn,
+      )),
+    );
+  }
+
+  @override
+  Duration get transitionDuration => const Duration(milliseconds: 400);
 }
 
 class SplashScreen extends StatefulWidget {
@@ -36,7 +77,7 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   void navigationPage() {
-    Navigator.of(context).pushReplacementNamed('/MinhasMudas');
+    Navigator.of(context).pushReplacementNamed('/tabs');
   }
 
   @override
