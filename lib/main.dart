@@ -50,7 +50,7 @@ class _SplashScreenState extends State<SplashScreen> {
     return new Scaffold(
       backgroundColor: Colors.white,
       body: new Center(
-        child: new Image.asset('images/eternify.png'),
+        child: new Image.asset('images/kefir_logo.png'),
       ),
     );
   }

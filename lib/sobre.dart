@@ -15,7 +15,7 @@ class Sobre extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             new Image.asset(
-              'images/eternify.png',
+              'images/kefir_logo.png',
               width: 341.0,
               height: 133.0,
             ),

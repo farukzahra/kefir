@@ -10,7 +10,7 @@ buildDrawer(BuildContext context) {
       padding: EdgeInsets.zero,
       children: <Widget>[
         DrawerHeader(
-          child: new Image.asset('images/eternify.png'),
+          child: new Image.asset('images/kefir_logo.png'),
           decoration: BoxDecoration(
             color: Colors.white,
           ),
