@@ -82,7 +82,7 @@ class _MudaDetailState extends State<MudaDetail> {
 
     prefs.setStringList("listaGeral", _values);
 
-    Navigator.of(context).pushReplacementNamed('/MinhasMudas');
+    Navigator.pop(context);
   }
 
   Widget _buildListView() {
