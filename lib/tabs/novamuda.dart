@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:kefir/model_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class NovaMuda extends StatefulWidget {
-
   PageController tabController;
 
   NovaMuda(this.tabController);
@@ -75,17 +75,19 @@ class _NovaMudaState extends State<NovaMuda> {
   }
 
   _criaMuda(String nome) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    List<String> lista = [];
-    prefs.setStringList(nome, lista);
+    // SharedPreferences prefs = await SharedPreferences.getInstance();
+    // List<String> lista = [];
+    // prefs.setStringList(nome, lista);
 
-    List<String> listaGeral = prefs.getStringList("listaGeral");
-    if (listaGeral == null) {
-      listaGeral = List<String>();
-    }
-    listaGeral.add(nome);
-    prefs.setStringList("listaGeral", listaGeral);
+    // List<String> listaGeral = prefs.getStringList("listaGeral");
+    // if (listaGeral == null) {
+    //   listaGeral = List<String>();
+    // }
+    // listaGeral.add(nome);
+    // prefs.setStringList("listaGeral", listaGeral);
     //Navigator.of(context).pushReplacementNamed('/MinhasMudas');
+    ModelProvider.of(context).createKefirCommand(nome);
+
     FocusScope.of(context).requestFocus(new FocusNode());
     widget.tabController.jumpTo(0.0);
   }

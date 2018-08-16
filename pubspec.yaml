@@ -21,6 +21,9 @@ dependencies:
   url_launcher: ^3.0.3
   firebase_database: ^1.0.3
   http: ^0.11.3+17
+  rx_command: ^2.0.3
+  rx_widgets: ^1.0.4
+  uuid: ^1.0.3
 
 
 dev_dependencies:

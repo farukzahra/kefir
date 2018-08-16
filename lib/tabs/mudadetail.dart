@@ -1,99 +1,95 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
-import 'package:intl/intl.dart';
 
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:kefir/model/kefir.dart';
+import 'package:kefir/model_provider.dart';
 
-class MudaDetail extends StatefulWidget {
-  final String _muda;
+import 'package:rx_widgets/rx_widgets.dart';
 
-  MudaDetail(this._muda);
+class MudaDetail extends StatelessWidget {
+  final Kefir muda;
 
-  @override
-  _MudaDetailState createState() => _MudaDetailState(_muda);
-}
+  MudaDetail(this.muda);
 
-class _MudaDetailState extends State<MudaDetail> {
-  String _muda;
-  List<String> _values = [];
+  //List<String> _values = [];
 
-  _MudaDetailState(this._muda);
-
-  DateFormat _formatter = DateFormat('dd/MM/yyyy HH:mm');
+  //DateFormat _formatter = DateFormat('dd/MM/yyyy HH:mm');
 
   Future<List<String>> _getData() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    _values = prefs.getStringList(_muda);
-    if (_values == null) {
-      _values = List<String>();
-    }
-    _ordenaLista();
-    return _values;
+    // SharedPreferences prefs = await SharedPreferences.getInstance();
+    // _values = prefs.getStringList(muda);
+    // if (_values == null) {
+    //   _values = List<String>();
+    // }
+    // _ordenaLista();
+    return ["1", "2"];
   }
 
   _ordenaLista() {
-    _values.sort((a, b) {
-      DateTime adata = _formatter.parse(a);
-      DateTime bdata = _formatter.parse(b);
-      return bdata.compareTo(adata);
-    });
+    // _values.sort((a, b) {
+    //   DateTime adata = _formatter.parse(a);
+    //   DateTime bdata = _formatter.parse(b);
+    //   return bdata.compareTo(adata);
+    // });
   }
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-        future: _getData(),
-        builder: (BuildContext context, AsyncSnapshot snapshot) {
-          return Scaffold(
-              backgroundColor: Colors.white,
-              appBar: AppBar(
-                title: const Text('Registrar Troca'),
-              ),
-              floatingActionButton: FloatingActionButton(
-                onPressed: _incrementCounter,
-                tooltip: 'Increment',
-                child: Icon(Icons.add),
-              ),
-              body: new Column(children: <Widget>[
-                FlatButton(
-                  onPressed: () {
-                    _removerMuda();
-                  },
-                  child: Column(
-                    // Replace with a Row for horizontal icon + text
-                    children: <Widget>[
-                      Icon(Icons.delete),
-                      Text("Remover esta muda")
-                    ],
-                  ),
-                ),
-                new Expanded(
-                  child: new Container(height: 200.0, child: _buildListView()),
-                ),
-              ]));
-        });
+    return Scaffold(
+        backgroundColor: Colors.white,
+        appBar: AppBar(
+          title: const Text('Registrar Troca'),
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () => _addRegistro(context),
+          tooltip: 'Registrar',
+          child: Icon(Icons.add),
+        ),
+        body: new Column(children: <Widget>[
+          FlatButton(
+            onPressed: () {
+              _removerMuda(context);
+            },
+            child: Column(
+              // Replace with a Row for horizontal icon + text
+              children: <Widget>[Icon(Icons.delete), Text("Remover esta muda")],
+            ),
+          ),
+          new Expanded(
+            child:
+                new Container(height: 200.0, child: _buildListViewRX(context)),
+          ),
+        ]));
   }
 
-  void _removerMuda() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    List<String> _values = prefs.getStringList("listaGeral");
-
-    _values.remove(_muda);
-
-    prefs.setStringList("listaGeral", _values);
-
+  void _removerMuda(BuildContext context) async {
+    ModelProvider.of(context).removeKefirCommand(muda);
     Navigator.pop(context);
   }
 
-  Widget _buildListView() {
+  Widget _buildListViewRX(BuildContext context) {
+    ModelProvider.of(context)
+        .addRegistroKefirCommand({'kefir': muda, 'listar': true});
+
+    return RxLoader<List<String>>(
+      radius: 25.0,
+      commandResults: ModelProvider.of(context).addRegistroKefirCommand,
+      dataBuilder: (context, data) => _buildListView(context, data),
+      placeHolderBuilder: (context) => Center(child: Text("")),
+      errorBuilder: (context, ex) =>
+          Center(child: Text("Error: ${ex.toString()}")),
+    );
+  }
+
+  Widget _buildListView(BuildContext context, List<String> data) {
     return ListView.builder(
-      itemCount: _values != null ? _values.length : 0,
+      itemCount: data != null ? data.length : 0,
       itemBuilder: (BuildContext context, int index) {
         return Column(
           children: <Widget>[
             ListTile(
-              title: Text(_values[index]),
-              trailing: _buildDeleteButton(context, _values[index]),
+              title: Text(data[index]),
+              trailing: _buildDeleteButton(context, data[index]),
             ),
             Divider(
               height: 2.0,
@@ -104,31 +100,28 @@ class _MudaDetailState extends State<MudaDetail> {
     );
   }
 
-  void _incrementCounter() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    var now = DateTime.now();
-    setState(() {
-      _values.add(_formatter.format(now));
-      _ordenaLista();
-    });
-    prefs.setStringList(_muda, _values);
+  void _addRegistro(BuildContext context) async {
+    ModelProvider.of(context)
+        .addRegistroKefirCommand({'kefir': muda, 'listar': false});
   }
 
   Widget _buildDeleteButton(BuildContext context, String registro) {
     return IconButton(
       icon: Icon(Icons.delete),
       onPressed: () {
-        _deletaRegistro(registro);
+        _deletaRegistro(context, registro);
       },
     );
   }
 
-  void _deletaRegistro(String registro) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    setState(() {
-      _values.remove(registro);
-      _ordenaLista();
-    });
-    prefs.setStringList(_muda, _values);
+  void _deletaRegistro(BuildContext context, String registro) async {
+    try {
+      ModelProvider.of(context)
+          .removeRegistroKefirCommand({'kefir': muda, 'registro': registro});
+      ModelProvider.of(context)
+          .addRegistroKefirCommand({'kefir': muda, 'listar': true});
+    } catch (e) {
+      print(e.toString());
+    }
   }
 }

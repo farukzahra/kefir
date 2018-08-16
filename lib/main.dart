@@ -6,7 +6,35 @@ import 'dart:async';
 import './screens/about.dart' as _aboutPage;
 import './screens/support.dart' as _supportPage;
 
-void main() => runApp(new MaterialApp(
+import 'package:kefir/model/homepage_model.dart';
+import 'package:kefir/model_provider.dart';
+import 'package:kefir/service/kefirservice.dart';
+
+void main() => runApp(MaterialApp(
+      home: MyApp(),
+    ));
+
+class MyApp extends StatefulWidget {
+  @override
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  KefirService _service;
+  HomePageModel _model;
+
+  @override
+  void initState() {
+    super.initState();
+    _service = new KefirService();
+    _model = new HomePageModel(_service);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return new ModelProvider(
+      model: _model,
+      child: new MaterialApp(
         title: 'Kefir - Compartilhe',
         theme: new ThemeData(
             primarySwatch: Colors.green,
@@ -30,7 +58,11 @@ void main() => runApp(new MaterialApp(
         },
         routes: <String, WidgetBuilder>{
           '/tabs': (BuildContext context) => new Tabs(),
-        }));
+        },
+      ),
+    );
+  }
+}
 
 class FromRightToLeft<T> extends MaterialPageRoute<T> {
   FromRightToLeft({WidgetBuilder builder, RouteSettings settings})

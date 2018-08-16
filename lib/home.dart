@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import './tabs/minhasmudas.dart' as _firstTab;
-import './tabs/novamuda.dart' as _secondTab;
-import './tabs/doar.dart' as _thirdTab;
+
+import './tabs/minhasmudas.dart';
+import './tabs/novamuda.dart';
+import './tabs/doar.dart';
 
 class Tabs extends StatefulWidget {
   @override
@@ -10,7 +11,9 @@ class Tabs extends StatefulWidget {
 }
 
 class TabsState extends State<Tabs> {
+  
   PageController _tabController;
+  MinhasMudas _minhasMudas;
 
   var _title_app = null;
   int _tab = 0;
@@ -20,6 +23,7 @@ class TabsState extends State<Tabs> {
     super.initState();
     _tabController = new PageController();
     this._title_app = TabItems[0].title;
+    _minhasMudas = MinhasMudas();    
   }
 
   @override
@@ -29,8 +33,8 @@ class TabsState extends State<Tabs> {
   }
 
   @override
-  Widget build(BuildContext context) => new Scaffold(
-
+  Widget build(BuildContext context) {
+    return new Scaffold(
       //App Bar
       appBar: new AppBar(
         title: new Text(
@@ -47,11 +51,7 @@ class TabsState extends State<Tabs> {
       body: new PageView(
         controller: _tabController,
         onPageChanged: onTabChanged,
-        children: <Widget>[
-          new _firstTab.MinhasMudas(),
-          new _secondTab.NovaMuda(_tabController),
-          new _thirdTab.Doar()
-        ],
+        children: <Widget>[_minhasMudas, NovaMuda(_tabController), Doar()],
       ),
 
       //Tabs
@@ -81,42 +81,45 @@ class TabsState extends State<Tabs> {
       //Drawer
       drawer: new Drawer(
         child: new ListView(
-        children: <Widget>[
-          new Container(
-            height: 120.0,
-            child: new DrawerHeader(
-              padding: new EdgeInsets.all(0.0),
-              decoration: new BoxDecoration(
-                color: Colors.white,
-              ),
-              child: new Center(
-                child: new Image.asset('images/kefir_logo.png'),
+          children: <Widget>[
+            new Container(
+              height: 120.0,
+              child: new DrawerHeader(
+                padding: new EdgeInsets.all(0.0),
+                decoration: new BoxDecoration(
+                  color: Colors.white,
+                ),
+                child: new Center(
+                  child: new Image.asset('images/kefir_logo.png'),
+                ),
               ),
             ),
-          ),
-          new ListTile(
-              leading: new Icon(Icons.chat),
-              title: new Text('Sugestões'),
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.of(context).pushNamed('/support');
-              }),
-          new ListTile(
-              leading: new Icon(Icons.info),
-              title: new Text('Sobre'),
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.of(context).pushNamed('/about');
-              }),
-          new Divider(),
-          new ListTile(
-              leading: new Icon(Icons.exit_to_app),
-              title: new Text('Sair'),
-              onTap: () {
-                Navigator.pop(context);
-              }),
-        ],
-      )));
+            new ListTile(
+                leading: new Icon(Icons.chat),
+                title: new Text('Sugestões'),
+                onTap: () {
+                  Navigator.pop(context);
+                  Navigator.of(context).pushNamed('/support');
+                }),
+            new ListTile(
+                leading: new Icon(Icons.info),
+                title: new Text('Sobre'),
+                onTap: () {
+                  Navigator.pop(context);
+                  Navigator.of(context).pushNamed('/about');
+                }),
+            new Divider(),
+            new ListTile(
+                leading: new Icon(Icons.exit_to_app),
+                title: new Text('Sair'),
+                onTap: () {
+                  Navigator.pop(context);
+                }),
+          ],
+        ),
+      ),
+    );
+  }
 
   void onTap(int tab) {
     _tabController.jumpToPage(tab);
