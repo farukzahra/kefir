@@ -50,35 +50,8 @@ class _NovaMudaState extends State<NovaMuda> {
                     controller: nomeController,
                   ),
                   SizedBox(height: 20.0),
-                  FMZIconButton(_criaMuda,Icons.save, Theme.of(context).accentColor),
-                  Container(
-                    width: double.infinity,
-                    child: RaisedButton(
-                      color: Theme.of(context).accentColor,
-                      textColor: Colors.white,
-                      elevation: 4.0,
-                      splashColor: Colors.blueGrey,
-                      onPressed: () {
-                        _criaMuda();
-                      },
-                      child: Row(
-                        children: <Widget>[
-                          Icon(
-                            Icons.save,
-                            size: 18.0,
-                          ),
-                          Expanded(
-                            child: Text(
-                              'Criar',
-                              textAlign: TextAlign.center,
-                            ),
-                          ),
-                          Icon(FontAwesomeIcons.facebookF,
-                              size: 18.0, color: Theme.of(context).accentColor)
-                        ],
-                      ),
-                    ),
-                  ),
+                  FMZIconButton(_criaMuda, Icons.save,
+                      Theme.of(context).accentColor, 'Criar'),
                 ],
               ),
             )

@@ -74,8 +74,9 @@ class FMZIconButton extends StatelessWidget {
   final Function _onPressed;
   final IconData _icon;
   final Color _color;
+  final String _text;
 
-  FMZIconButton(this._onPressed,this._icon, this._color);
+  FMZIconButton(this._onPressed,this._icon, this._color, this._text);
 
   @override
   Widget build(BuildContext context) {
@@ -97,7 +98,7 @@ class FMZIconButton extends StatelessWidget {
             ),
             Expanded(
               child: Text(
-                'Criar',
+                _text,
                 textAlign: TextAlign.center,
               ),
             ),
