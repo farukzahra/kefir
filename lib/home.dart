@@ -1,5 +1,11 @@
+import 'dart:async';
+import 'dart:io';
+
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_facebook_login/flutter_facebook_login.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 import './tabs/minhasmudas.dart';
 import './tabs/novamuda.dart';
@@ -11,7 +17,10 @@ class Tabs extends StatefulWidget {
 }
 
 class TabsState extends State<Tabs> {
-  
+  final FacebookLogin facebookSignIn = new FacebookLogin();
+  final GoogleSignIn googleSignIn = GoogleSignIn();
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+
   PageController _tabController;
   MinhasMudas _minhasMudas;
 
@@ -23,7 +32,7 @@ class TabsState extends State<Tabs> {
     super.initState();
     _tabController = new PageController();
     this._title_app = TabItems[0].title;
-    _minhasMudas = MinhasMudas();    
+    _minhasMudas = MinhasMudas();
   }
 
   @override
@@ -86,11 +95,32 @@ class TabsState extends State<Tabs> {
               height: 120.0,
               child: new DrawerHeader(
                 padding: new EdgeInsets.all(0.0),
-                decoration: new BoxDecoration(
-                  color: Colors.white,
-                ),
                 child: new Center(
-                  child: new Image.asset('images/kefir_logo.png'),
+                  child: new FutureBuilder<FirebaseUser>(
+                      future: _getUser(),
+                      builder: (BuildContext context,
+                          AsyncSnapshot<FirebaseUser> snapshot) {
+                        return new Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              new Container(
+                                width: 80.0,
+                                height: 80.0,
+                                decoration: new BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  image: new DecorationImage(
+                                    fit: BoxFit.fill,
+                                    image: new NetworkImage(
+                                        snapshot.data.photoUrl),
+                                  ),
+                                ),
+                              ),
+                              new Text(snapshot.data.displayName, textScaleFactor: 1.3),
+                              //new Text(snapshot.data.uid, textScaleFactor: 1.3),
+                            ]);
+                        // return new Image.network(snapshot.data.photoUrl);
+                      }),
                 ),
               ),
             ),
@@ -111,14 +141,27 @@ class TabsState extends State<Tabs> {
             new Divider(),
             new ListTile(
                 leading: new Icon(Icons.exit_to_app),
-                title: new Text('Sair'),
-                onTap: () {
-                  Navigator.pop(context);
-                }),
+                title: new Text('Logout'),
+                onTap: () => signout()),
           ],
         ),
       ),
     );
+  }
+
+  Future<FirebaseUser> _getUser() async {
+    var user = await _auth.currentUser();
+    print(user);
+    return user;
+  }
+
+  void signout() async {
+    await googleSignIn.signOut();
+    await facebookSignIn.logOut();
+    await FirebaseAuth.instance.signOut();
+    print("User Signed out");
+    Navigator.pop(context);
+    exit(0);
   }
 
   void onTap(int tab) {

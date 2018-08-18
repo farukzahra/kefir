@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "357525430801",
+    "firebase_url": "https://kefir-1e0d8.firebaseio.com",
+    "project_id": "kefir-1e0d8",
+    "storage_bucket": "kefir-1e0d8.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:357525430801:android:6d797c71caf5ba2d",
+        "android_client_info": {
+          "package_name": "com.fmz.kefir"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "357525430801-v0np1id5c62e8tj91hutrs5uf7celo25.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.fmz.kefir",
+            "certificate_hash": "627865b16fa53f4a40d9a5f28e762598f4b72e45"
+          }
+        },
+        {
+          "client_id": "357525430801-n1duumqpf7627p95mujuqqlnu1pv3r6m.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBZdiLLGi0XDgTAutJcOPaGX_2i_tvGqmc"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "357525430801-n1duumqpf7627p95mujuqqlnu1pv3r6m.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

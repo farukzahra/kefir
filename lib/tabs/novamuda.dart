@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:kefir/model_provider.dart';
+import 'package:kefir/utils/utils.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class NovaMuda extends StatefulWidget {
@@ -48,6 +50,7 @@ class _NovaMudaState extends State<NovaMuda> {
                     controller: nomeController,
                   ),
                   SizedBox(height: 20.0),
+                  FMZIconButton(_criaMuda,Icons.save, Theme.of(context).accentColor),
                   Container(
                     width: double.infinity,
                     child: RaisedButton(
@@ -56,13 +59,24 @@ class _NovaMudaState extends State<NovaMuda> {
                       elevation: 4.0,
                       splashColor: Colors.blueGrey,
                       onPressed: () {
-                        // Validate will return true if the form is valid, or false if
-                        // the form is invalid.
-                        if (_formKey.currentState.validate()) {
-                          _criaMuda(nomeController.text);
-                        }
+                        _criaMuda();
                       },
-                      child: Text('Criar'),
+                      child: Row(
+                        children: <Widget>[
+                          Icon(
+                            Icons.save,
+                            size: 18.0,
+                          ),
+                          Expanded(
+                            child: Text(
+                              'Criar',
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                          Icon(FontAwesomeIcons.facebookF,
+                              size: 18.0, color: Theme.of(context).accentColor)
+                        ],
+                      ),
                     ),
                   ),
                 ],
@@ -74,21 +88,12 @@ class _NovaMudaState extends State<NovaMuda> {
     );
   }
 
-  _criaMuda(String nome) async {
-    // SharedPreferences prefs = await SharedPreferences.getInstance();
-    // List<String> lista = [];
-    // prefs.setStringList(nome, lista);
-
-    // List<String> listaGeral = prefs.getStringList("listaGeral");
-    // if (listaGeral == null) {
-    //   listaGeral = List<String>();
-    // }
-    // listaGeral.add(nome);
-    // prefs.setStringList("listaGeral", listaGeral);
-    //Navigator.of(context).pushReplacementNamed('/MinhasMudas');
-    ModelProvider.of(context).createKefirCommand(nome);
-
-    FocusScope.of(context).requestFocus(new FocusNode());
-    widget.tabController.jumpTo(0.0);
+  _criaMuda() async {
+    if (_formKey.currentState.validate()) {
+      var nome = nomeController.text;
+      ModelProvider.of(context).createKefirCommand(nome);
+      FocusScope.of(context).requestFocus(new FocusNode());
+      widget.tabController.jumpTo(0.0);
+    }
   }
 }

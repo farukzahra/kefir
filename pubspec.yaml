@@ -24,6 +24,11 @@ dependencies:
   rx_command: ^2.0.3
   rx_widgets: ^1.0.4
   uuid: ^1.0.3
+  firebase_auth: ^0.5.18
+  google_sign_in: ^3.0.4
+  font_awesome_flutter: ^8.0.1
+  flutter_facebook_login: ^1.1.1
+
 
 
 dev_dependencies:

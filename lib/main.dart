@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:kefir/home.dart';
+import 'package:kefir/tabs/login.dart';
 import 'dart:async';
 
 import './screens/about.dart' as _aboutPage;
@@ -9,6 +10,7 @@ import './screens/support.dart' as _supportPage;
 import 'package:kefir/model/homepage_model.dart';
 import 'package:kefir/model_provider.dart';
 import 'package:kefir/service/kefirservice.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 void main() => runApp(MaterialApp(
       home: MyApp(),
@@ -58,6 +60,7 @@ class _MyAppState extends State<MyApp> {
         },
         routes: <String, WidgetBuilder>{
           '/tabs': (BuildContext context) => new Tabs(),
+          '/login': (BuildContext context) => new Login(),
         },
       ),
     );
@@ -99,17 +102,29 @@ class FromRightToLeft<T> extends MaterialPageRoute<T> {
 
 class SplashScreen extends StatefulWidget {
   @override
-  _SplashScreenState createState() => new _SplashScreenState();
+  _SplashScreenState createState() => new  _SplashScreenState();
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  FirebaseUser _user;
+
   startTime() async {
+    _user = await _auth.currentUser();
     var _duration = new Duration(seconds: 2);
-    return new Timer(_duration, navigationPage);
+    if (_user != null) {
+      return new Timer(_duration, navigationPageHome);
+    } else {
+      return new Timer(_duration, navigationPageLogin);
+    }
   }
 
-  void navigationPage() {
+  void navigationPageHome() {
     Navigator.of(context).pushReplacementNamed('/tabs');
+  }
+
+  void navigationPageLogin() {
+    Navigator.of(context).pushReplacementNamed('/login');
   }
 
   @override
